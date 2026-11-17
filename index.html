@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Phish or Legit?</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="label">BANK AI FIREWALL</p>
+          <h1>Phish or Legit?</h1>
+        </div>
+        <button id="reset-btn" class="secondary-btn">New Shift</button>
+      </header>
+
+      <section class="hud">
+        <div class="stat-box">
+          <span>Score</span>
+          <strong id="score">0</strong>
+        </div>
+        <div class="stat-box">
+          <span>Streak</span>
+          <strong id="streak">0</strong>
+        </div>
+        <div class="stat-box timer-box">
+          <span>Time</span>
+          <strong id="timer">60.0s</strong>
+        </div>
+      </section>
+
+      <main class="game-panel">
+        <div id="card" class="decision-card" aria-live="polite">
+          <div class="card-content placeholder-content">
+            <p class="label">Ready for the first alert</p>
+            <h2>Start your shift</h2>
+            <p>Approve real transfers. Block scams before the clock hits zero.</p>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="block-btn" class="action-btn block-btn">BLOCK</button>
+          <button id="approve-btn" class="action-btn approve-btn">APPROVE</button>
+        </div>
+
+        <div id="feedback" class="feedback" aria-live="polite">
+          Watch for urgency, spoofed identities, and suspicious links.
+        </div>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
