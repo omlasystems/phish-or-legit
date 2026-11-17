@@ -1,266 +1,36 @@
 const scenarios = [
-  {
-    type: 'transfer',
-    title: 'Payroll transfer',
-    amount: '$2,480.00',
-    meta: ['From: SecurePay', 'To: Nia R.', 'Recurring: Weekly'],
-    message: 'Weekly payroll deposited from the payroll office. The memo matches your usual schedule and the transfer amount is exactly the same as before.',
-    correct: 'approve',
-    flags: ['Routine recurring', 'Same vendor', 'Expected amount'],
-    feedback: 'Correct. This is a normal recurring payroll transfer with a matching amount and source.'
-  },
-  {
-    type: 'sms',
-    title: 'Text message alert',
-    amount: '',
-    meta: ['SMS', 'From: +1 (555) 201-4789', 'Urgent'],
-    message: 'Your account is locked. Tap now to verify your identity or your funds will be frozen. https://verify-bank-demo.xyz/urgent',
-    correct: 'block',
-    flags: ['Urgent scare tactic', 'Untrusted link', 'Spoofed sender'],
-    feedback: 'Correct. The message creates panic, uses an unknown link, and asks you to act before checking the bank directly.'
-  },
-  {
-    type: 'voice',
-    title: 'Voice clone request',
-    amount: '$850.00',
-    meta: ['Voice memo', 'Caller: “Auntie Tunde”', 'Time: 02:12 AM'],
-    message: '“Hi dear, I’m in a rush and can’t reach my phone. Please transfer $850 so I can pay a friend. I’ll send the money back tomorrow.”',
-    correct: 'block',
-    flags: ['Odd timing', 'Pressure for cash', 'Unusual request'],
-    feedback: 'Correct. A sudden emotional request after midnight, combined with urgency and a strange payout reason, is a common scam pattern.'
-  },
-  {
-    type: 'transfer',
-    title: 'Market vendor payment',
-    amount: '$64.20',
-    meta: ['From: Aria Market', 'To: Kumasi Grocer', 'Invoice #318A'],
-    message: 'Payment approved for an order from your local market vendor. The invoice number matches the receipt you already received and the merchant is in your saved contacts.',
-    correct: 'approve',
-    flags: ['Saved merchant', 'Matches invoice', 'Verified receipt'],
-    feedback: 'Correct. It matches a prior purchase and comes from a known merchant in your address book.'
-  },
-  {
-    type: 'sms',
-    title: 'Bank verification text',
-    amount: '',
-    meta: ['SMS', 'From: Bank of Kora', 'Reference: #10412'],
-    message: 'Your secure transfer has been received. Log in to your official app to review the details. If you did not request this, call the number on the back of your card.',
-    correct: 'approve',
-    flags: ['Official language', 'No suspicious link', 'Follow-up via trusted channel'],
-    feedback: 'Correct. This is a routine, low-pressure message that encourages you to verify through the bank’s official contact method.'
-  },
-  {
-    type: 'voice',
-    title: 'Deepfake call',
-    amount: '$1,400.00',
-    meta: ['Voicemail', 'Caller: “Manager”', 'Repeated calls'],
-    message: '“This is a security check. We need you to move funds to a safe account before the system audits your wallet. We can’t take no for an answer.”',
-    correct: 'block',
-    flags: ['Authority pressure', 'Insistent demands', 'Unexpected transfer'],
-    feedback: 'Correct. Real bank staff will never demand that you move funds immediately to a “safe account.”'
-  },
-  {
-    type: 'transfer',
-    title: 'Rent payment',
-    amount: '$1,200.00',
-    meta: ['From: Riverstone Homes', 'To: Landlord', 'Scheduled: 1st of month'],
-    message: 'Scheduled rent transfer to your landlord. Details match the lease agreement and the account name is exactly the same as your tenancy records.',
-    correct: 'approve',
-    flags: ['Lease match', 'Known recipient', 'Regular schedule'],
-    feedback: 'Correct. The payment aligns perfectly with the lease agreement and recurring schedule.'
-  },
-  {
-    type: 'sms',
-    title: 'Prize message',
-    amount: '',
-    meta: ['SMS', 'From: “LuckyCash”', 'Bonus claim'],
-    message: 'Congratulations! You have won a mobile wallet bonus. Claim your reward now by paying a small activation fee with your card and receiving an instant SMS code.',
-    correct: 'block',
-    flags: ['Prize scam', 'Upfront fee', 'Pressure to act quickly'],
-    feedback: 'Correct. Prize scams often ask for a payment or personal data before the “reward” exists.'
-  },
-  {
-    type: 'transfer',
-    title: 'School fee payment',
-    amount: '$320.00',
-    meta: ['From: Parent transfer', 'To: Bright Future Academy', 'Reference: Student #204'],
-    message: 'Transfer from your parent for school fees. The amount matches the tuition invoice and the recipient account label matches the school’s official name.',
-    correct: 'approve',
-    flags: ['Match to invoice', 'Known recipient', 'Expected family payment'],
-    feedback: 'Correct. This is a confirmed, expected payment with the right reference and recipient.'
-  },
-  {
-    type: 'voice',
-    title: 'Caller ID spoof',
-    amount: '$500.00',
-    meta: ['Voice call', 'Caller ID: “Bank branch”', 'From: 0800-555-0101'],
-    message: '“We noticed a suspicious login. Please send $500 to a test wallet so we can secure your account before the fraud team arrives.”',
-    correct: 'block',
-    flags: ['Test wallet', 'Suspicious request', 'Authority scam'],
-    feedback: 'Correct. Legitimate banks never instruct you to send money to a “test wallet” to verify or secure an account.'
-  }
+  {type:'TRANSFER',icon:'↗',title:'Payroll transfer',amount:'$2,480.00',meta:['SOURCE · SecurePay','TO · Nia R.','RECURRING · WEEKLY'],message:'Weekly payroll from the company payroll office. The memo matches your usual schedule and the amount is exactly the same as last week.',signals:['Routine recurring payment','Known source','Expected amount'],correct:'approve',explanation:'Legit. It is a familiar, expected payment with a matching amount and source.'},
+  {type:'SMS ALERT',icon:'✉',title:'Account locked!',amount:'',meta:['CHANNEL · SMS','SENDER · +1 (555) 201-4789','PRIORITY · URGENT'],message:'Your account is locked. Tap now to verify your identity or your funds will be frozen. <span class="quoted">verify-bank-demo.xyz/urgent</span>',signals:['Threatens account access','Untrusted link','Urgency pressure'],correct:'block',explanation:'Phish. Panic tactics and a suspicious link are designed to rush you into handing over credentials.'},
+  {type:'VOICE REQUEST',icon:'◖',title:'“Auntie Tunde”',amount:'$850.00',meta:['CHANNEL · VOICE MEMO','TIME · 02:12 AM','REQUEST · MOBILE MONEY'],message:'“Hi dear, I’m in a rush and can’t reach my phone. Please send $850 so I can pay a friend. I’ll send it back tomorrow.”',signals:['Unexpected money request','Time pressure','Verify identity first'],correct:'block',explanation:'Suspicious. A familiar voice is not proof of identity. Call back on a number you already trust.'},
+  {type:'TRANSFER',icon:'↗',title:'Market vendor payment',amount:'$64.20',meta:['SOURCE · Aria Market','TO · Kumasi Grocer','INVOICE · #318A'],message:'Payment for an order from your local market vendor. The invoice matches the receipt and the merchant is in your saved contacts.',signals:['Saved merchant','Matches invoice','Receipt verified'],correct:'approve',explanation:'Legit. The purchase, invoice, and known merchant details all line up.'},
+  {type:'SMS ALERT',icon:'✉',title:'Bank security notice',amount:'',meta:['CHANNEL · SMS','SENDER · Bank of Kora','REFERENCE · #10412'],message:'Your secure transfer has been received. Review it in the official app. If you did not make this transfer, call the number on the back of your card.',signals:['No sign-in link','Low-pressure wording','Trusted callback route'],correct:'approve',explanation:'Legit. It directs you to the official app and a trusted number, without asking for secrets.'},
+  {type:'VOICE REQUEST',icon:'◖',title:'“Your bank manager”',amount:'$1,400.00',meta:['CHANNEL · VOICE CALL','CALLS · 3 MISSED','REQUEST · MOVE FUNDS'],message:'“We need you to move funds to a safe account before the system audits your wallet. We can’t take no for an answer.”',signals:['Authority pressure','Unexpected transfer','“Safe account” is a red flag'],correct:'block',explanation:'Scam. A real bank will not ask you to transfer money to a “safe account.” Hang up and call the official number.'},
+  {type:'TRANSFER',icon:'↗',title:'Monthly rent',amount:'$1,200.00',meta:['TO · Riverstone Homes','SCHEDULED · 1ST OF MONTH','RECIPIENT · VERIFIED'],message:'Scheduled rent payment to your landlord. The details match your lease and the account name matches your tenancy records.',signals:['Lease details match','Known recipient','Regular schedule'],correct:'approve',explanation:'Legit. It matches the lease, recipient, and regular payment schedule.'},
+  {type:'SMS ALERT',icon:'✉',title:'You won a bonus!',amount:'',meta:['CHANNEL · SMS','SENDER · “LuckyCash”','ACTION · CLAIM NOW'],message:'Congratulations! You won a mobile wallet bonus. Pay a small activation fee and send us the SMS code to claim your instant reward.',signals:['Upfront fee','Requests a verification code','Prize you did not enter'],correct:'block',explanation:'Scam. Never share a one-time code or pay a fee to claim an unexpected prize.'},
+  {type:'TRANSFER',icon:'↗',title:'School fee payment',amount:'$320.00',meta:['TO · Bright Future Academy','REFERENCE · STUDENT #204','INVOICE · MATCHED'],message:'Transfer for school fees. The amount matches the tuition invoice and the recipient label matches the school’s official name.',signals:['Invoice matches','Expected recipient','Correct reference'],correct:'approve',explanation:'Legit. It is an expected payment with the right recipient and reference.'},
+  {type:'VOICE REQUEST',icon:'◖',title:'Caller ID spoof',amount:'$500.00',meta:['CHANNEL · VOICE CALL','CALLER ID · “BANK BRANCH”','REQUEST · TEST WALLET'],message:'“We noticed a suspicious login. Send $500 to a test wallet so we can secure your account before the fraud team arrives.”',signals:['“Test wallet” request','Unverified caller','Unexpected transfer'],correct:'block',explanation:'Scam. Banks never ask you to move funds to a test wallet to secure your account.'},
+  {type:'TRANSFER',icon:'↗',title:'Coffee with Sam',amount:'$8.50',meta:['TO · Sam K.','NOTE · COFFEE','CONTACT · SAVED'],message:'You asked Sam to pick up coffee. This is the exact amount you agreed on, sent to their usual mobile-money account.',signals:['Expected payment','Known contact','Amount confirmed'],correct:'approve',explanation:'Legit. The request matches an agreement you made and a familiar recipient.'},
+  {type:'SMS ALERT',icon:'✉',title:'Delivery fee due',amount:'',meta:['CHANNEL · SMS','SENDER · “Parcel Desk”','LINK · SHORT URL'],message:'We missed you! Your package is held. Pay $1.20 redelivery fee today: <span class="quoted">parcel-help.example/fee</span>',signals:['Unexpected delivery','Tiny fee bait','Unknown link'],correct:'block',explanation:'Phish. Fake delivery-fee texts use small payments to steal card details. Check with the carrier directly.'},
+  {type:'VOICE REQUEST',icon:'◖',title:'“Your daughter”',amount:'$300.00',meta:['CHANNEL · VOICE CALL','CALLER · UNKNOWN NUMBER','REQUEST · EMERGENCY'],message:'“I’m okay, but I need money right now. Don’t call my usual phone, just send it to this number and I’ll explain later.”',signals:['Secrecy and urgency','New payment destination','Verify with a known number'],correct:'block',explanation:'Suspicious. End the call and contact your family member using a number you already have saved.'},
+  {type:'TRANSFER',icon:'↗',title:'Utility bill',amount:'$47.36',meta:['TO · Kora Electric','ACCOUNT · SAVED BILLER','SCHEDULED · MONTHLY'],message:'Monthly electricity bill payment. The biller and account are saved, and the total matches this month’s statement.',signals:['Saved biller','Statement matches','Regular payment'],correct:'approve',explanation:'Legit. The biller is saved and the amount matches the statement.'},
+  {type:'SMS ALERT',icon:'✉',title:'“IT needs your code”',amount:'',meta:['CHANNEL · WORK CHAT','SENDER · “IT SUPPORT”','REQUEST · LOGIN CODE'],message:'I’m fixing your payroll access. Send me the six-digit sign-in code you just received so I can finish the update.',signals:['Asks for one-time code','Unexpected support request','Verify through official IT'],correct:'block',explanation:'Phish. Never share a one-time login code—even with someone claiming to be IT support.'}
 ];
 
-const scoreEl = document.getElementById('score');
-const streakEl = document.getElementById('streak');
-const timerEl = document.getElementById('timer');
-const cardEl = document.getElementById('card');
-const feedbackEl = document.getElementById('feedback');
-const blockBtn = document.getElementById('block-btn');
-const approveBtn = document.getElementById('approve-btn');
-const resetBtn = document.getElementById('reset-btn');
+const SHIFT_SECONDS=60;
+const $=id=>document.getElementById(id);
+const els={score:$('score'),streak:$('streak'),bestStreak:$('best-streak'),timer:$('timer'),progress:$('time-progress'),card:$('card'),feedback:$('feedback'),caseCount:$('case-count'),block:$('block-btn'),approve:$('approve-btn'),startOverlay:$('start-overlay'),gameover:$('gameover-overlay'),start:$('start-btn'),restart:$('restart-btn'),sound:$('sound-btn'),soundLabel:$('sound-label')};
+let game={active:false,locked:false,score:0,streak:0,bestStreak:0,answered:0,correct:0,time:SHIFT_SECONDS,current:null,deck:[],timerId:null,nextId:null,sound:true};
+let audioContext=null;
 
-let state = {
-  score: 0,
-  streak: 0,
-  timeLeft: 60,
-  round: 0,
-  deck: [],
-  timerId: null,
-  isRunning: false,
-  current: null
-};
-
-function shuffle(array) {
-  const copy = [...array];
-  for (let i = copy.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-}
-
-function formatTime(value) {
-  return `${Math.max(0, value).toFixed(1)}s`;
-}
-
-function renderCard() {
-  const item = state.current;
-
-  if (!item) {
-    cardEl.innerHTML = `
-      <div class="card-content placeholder-content">
-        <p class="label">Ready for the first alert</p>
-        <h2>Start your shift</h2>
-        <p>Approve real transfers. Block scams before the clock hits zero.</p>
-      </div>
-    `;
-    return;
-  }
-
-  const badgeClass = item.correct === 'approve' ? 'badge-approve' : 'badge-block';
-  const badgeText = item.correct === 'approve' ? 'Legit' : 'Scam';
-
-  cardEl.innerHTML = `
-    <div class="card-content">
-      <div class="card-badge ${badgeClass}">${badgeText}</div>
-
-      <div class="card-header">
-        <h2>${item.title}</h2>
-        ${item.amount ? `<div class="amount">${item.amount}</div>` : ''}
-      </div>
-
-      <div class="case-meta">
-        ${item.meta.map(tag => `<span class="case-chip">${tag}</span>`).join('')}
-      </div>
-
-      <div class="message-box">${item.message}</div>
-
-      <div class="flags">
-        ${item.flags.map(flag => `<span class="flag">${flag}</span>`).join('')}
-      </div>
-    </div>
-  `;
-}
-
-function updateHud() {
-  scoreEl.textContent = state.score;
-  streakEl.textContent = state.streak;
-  timerEl.textContent = formatTime(state.timeLeft);
-}
-
-function endGame() {
-  state.isRunning = false;
-  clearInterval(state.timerId);
-  const total = Math.max(1, state.round);
-  const accuracy = Math.round((state.score / (total * 10)) * 100);
-
-  feedbackEl.className = 'feedback';
-  feedbackEl.textContent = `Shift complete. Final score: ${state.score}. Accuracy estimate: ${accuracy}% . Press “New Shift” to do another run.`;
-
-  cardEl.innerHTML = `
-    <div class="card-content placeholder-content">
-      <p class="label">Shift complete</p>
-      <h2>Firewall offline</h2>
-      <p>Final score: <strong>${state.score}</strong></p>
-      <p>Keep an eye out for urgency, spoofed identities, and requests for quick transfers.</p>
-    </div>
-  `;
-}
-
-function nextRound() {
-  if (state.round >= state.deck.length) {
-    endGame();
-    return;
-  }
-
-  state.current = state.deck[state.round];
-  state.round += 1;
-  renderCard();
-}
-
-function judgeDecision(choice) {
-  if (!state.isRunning || !state.current) return;
-
-  const isCorrect = choice === state.current.correct;
-
-  if (isCorrect) {
-    const points = 10 + Math.ceil(state.timeLeft * 0.5);
-    state.score += points;
-    state.streak += 1;
-    feedbackEl.className = 'feedback correct';
-    feedbackEl.textContent = `${state.current.feedback} +${points} points`;
-  } else {
-    state.score = Math.max(0, state.score - 8);
-    state.streak = 0;
-    feedbackEl.className = 'feedback wrong';
-    feedbackEl.textContent = `Wrong call. ${state.current.feedback} -8 points`;
-  }
-
-  updateHud();
-
-  setTimeout(() => {
-    if (!state.isRunning) return;
-    nextRound();
-  }, 550);
-}
-
-function tick() {
-  state.timeLeft = Math.max(0, state.timeLeft - 0.1);
-  updateHud();
-
-  if (state.timeLeft <= 0) {
-    endGame();
-  }
-}
-
-function startGame() {
-  state.score = 0;
-  state.streak = 0;
-  state.timeLeft = 60;
-  state.round = 0;
-  state.deck = shuffle(scenarios);
-  state.isRunning = true;
-  clearInterval(state.timerId);
-  state.timerId = setInterval(tick, 100);
-  feedbackEl.className = 'feedback';
-  feedbackEl.textContent = 'Watch for urgency, spoofed identities, and suspicious links.';
-  updateHud();
-  nextRound();
-}
-
-blockBtn.addEventListener('click', () => judgeDecision('block'));
-approveBtn.addEventListener('click', () => judgeDecision('approve'));
-resetBtn.addEventListener('click', startGame);
-
-startGame();
+function shuffled(items){const result=[...items];for(let i=result.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[result[i],result[j]]=[result[j],result[i]]}return result}
+function playTone(kind){if(!game.sound)return;try{audioContext=audioContext||new(window.AudioContext||window.webkitAudioContext)();if(audioContext.state==='suspended')audioContext.resume();const now=audioContext.currentTime;const notes=kind==='correct'?[660,880]:kind==='wrong'?[220,165]:kind==='end'?[392,330,262]:[523,659];notes.forEach((frequency,index)=>{const oscillator=audioContext.createOscillator(),gain=audioContext.createGain(),start=now+index*.085;oscillator.type=kind==='wrong'?'triangle':'sine';oscillator.frequency.setValueAtTime(frequency,start);gain.gain.setValueAtTime(.0001,start);gain.gain.exponentialRampToValueAtTime(kind==='wrong'?.075:.055,start+.012);gain.gain.exponentialRampToValueAtTime(.0001,start+(kind==='wrong'?.13:.18));oscillator.connect(gain);gain.connect(audioContext.destination);oscillator.start(start);oscillator.stop(start+.2)})}catch(error){/* Audio is an optional enhancement; gameplay works without it. */}}
+function updateHud(){els.score.textContent=String(game.score).padStart(4,'0');els.streak.innerHTML=`${game.streak}<span class="streak-flame">×</span>`;els.bestStreak.textContent=game.bestStreak;els.timer.innerHTML=`${game.time.toFixed(1)}<span>s</span>`;els.progress.style.width=`${Math.max(0,game.time/SHIFT_SECONDS*100)}%`;els.progress.classList.toggle('warning',game.time<=15);els.caseCount.textContent=`CASE ${String(game.answered+1).padStart(2,'0')} / ∞`}
+function showCard(item){game.current=item;const meta=item.meta.map(value=>`<span class="meta-chip">${value}</span>`).join('');const signals=item.signals.map(value=>`<span class="intel-tag">${value}</span>`).join('');els.card.classList.remove('card-in','answer-correct','answer-wrong');void els.card.offsetWidth;els.card.classList.add('card-in');els.card.innerHTML=`<div class="card-grid"><div class="card-main"><div class="case-type"><span class="type-icon">${item.icon}</span>${item.type} · SECURITY REVIEW</div><h2 class="case-title">${item.title}</h2><div class="meta-list">${meta}</div><div class="message-box">${item.message}</div></div><aside class="intel-panel"><p class="intel-label">SIGNAL ANALYSIS</p><div class="intel-tags">${signals}</div>${item.amount?`<div class="amount-box"><span class="amount-label">TRANSFER AMOUNT</span><strong class="amount-value">${item.amount}</strong></div>`:''}</aside></div>`}
+function drawNext(){if(!game.active)return;if(!game.deck.length)game.deck=shuffled(scenarios);showCard(game.deck.pop());game.locked=false;els.block.disabled=false;els.approve.disabled=false;updateHud()}
+function decide(choice){if(!game.active||game.locked||!game.current)return;game.locked=true;els.block.disabled=true;els.approve.disabled=true;game.answered++;const isCorrect=choice===game.current.correct;const speedBonus=Math.ceil(game.time/10);if(isCorrect){const points=100+speedBonus+Math.min(game.streak*10,100);game.score+=points;game.streak++;game.bestStreak=Math.max(game.bestStreak,game.streak);game.correct++;els.feedback.className='feedback correct';els.feedback.textContent=`${game.current.explanation}  +${points} points`;els.card.classList.add('answer-correct');playTone('correct')}else{game.score=Math.max(0,game.score-50);game.streak=0;els.feedback.className='feedback wrong';els.feedback.textContent=`Not quite. ${game.current.explanation}  −50 points`;els.card.classList.add('answer-wrong');playTone('wrong')}updateHud();game.nextId=setTimeout(drawNext,760)}
+function tick(){if(!game.active)return;game.time=Math.max(0,game.time-.1);updateHud();if(game.time<=0)endGame()}
+function endGame(){if(!game.active)return;game.active=false;clearInterval(game.timerId);clearTimeout(game.nextId);els.block.disabled=true;els.approve.disabled=true;const accuracy=game.answered?Math.round(game.correct/game.answered*100):0;let previous=0;try{previous=Number(localStorage.getItem('phish-or-legit-best')||0)}catch(error){}const record=game.score>previous;if(record)try{localStorage.setItem('phish-or-legit-best',String(game.score))}catch(error){}$('final-score').textContent=String(game.score).padStart(4,'0');$('accuracy').textContent=`${accuracy}%`;$('cases-reviewed').textContent=game.answered;$('best-run-streak').textContent=game.bestStreak;$('new-record').classList.toggle('hidden',!record);$('result-emblem').classList.toggle('bad',accuracy<50);$('result-emblem').textContent=accuracy>=80?'✓':accuracy>=50?'◈':'!';$('result-kicker').textContent=accuracy>=80?'FIREWALL SECURE':'SHIFT REPORT';$('gameover-title').textContent=accuracy>=80?'Firewall held.':accuracy>=50?'Good work, analyst.':'More training recommended.';$('result-copy').textContent=accuracy>=80?'Sharp instincts. You kept the suspicious requests out.':accuracy>=50?'You caught some threats. Review the clues and keep sharpening your instincts.':'Scammers got through this time. Slow down, verify the sender, and try again.';els.gameover.classList.remove('hidden');playTone('end');els.restart.focus()}
+function startGame(){clearInterval(game.timerId);clearTimeout(game.nextId);game.active=true;game.locked=false;game.score=0;game.streak=0;game.bestStreak=0;game.answered=0;game.correct=0;game.time=SHIFT_SECONDS;game.deck=shuffled(scenarios);els.startOverlay.classList.add('hidden');els.gameover.classList.add('hidden');els.feedback.className='feedback';els.feedback.textContent='Review the details. Real banks never ask you to move money to a “safe” account.';updateHud();drawNext();game.timerId=setInterval(tick,100)}
+function setSound(enabled){game.sound=enabled;els.sound.setAttribute('aria-pressed',String(enabled));els.sound.setAttribute('aria-label',`Turn sound ${enabled?'off':'on'}`);els.soundLabel.textContent=enabled?'Sound on':'Sound off';els.sound.firstChild.textContent=enabled?'♫ ':'♩ '}
+els.block.addEventListener('click',()=>decide('block'));els.approve.addEventListener('click',()=>decide('approve'));els.start.addEventListener('click',startGame);els.restart.addEventListener('click',startGame);els.sound.addEventListener('click',()=>setSound(!game.sound));document.addEventListener('keydown',event=>{if(event.key==='ArrowLeft'){event.preventDefault();decide('block')}else if(event.key==='ArrowRight'){event.preventDefault();decide('approve')}else if(event.key==='Enter'&&!game.active&&!els.startOverlay.classList.contains('hidden'))startGame()});
+try{setSound(localStorage.getItem('phish-or-legit-sound')!=='off')}catch(error){setSound(true)}els.sound.addEventListener('click',()=>{try{localStorage.setItem('phish-or-legit-sound',game.sound?'on':'off')}catch(error){}});updateHud();

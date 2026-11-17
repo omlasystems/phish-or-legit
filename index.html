@@ -1,55 +1,78 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Phish or Legit?</title>
+    <meta name="theme-color" content="#07111f" />
+    <meta name="description" content="A rapid-fire security awareness game. Can you spot the scam before time runs out?" />
+    <title>Phish or Legit? — Firewall Training</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="app-shell">
+    <div class="ambient ambient-one" aria-hidden="true"></div>
+    <div class="ambient ambient-two" aria-hidden="true"></div>
+
+    <main class="app-shell">
       <header class="topbar">
-        <div>
-          <p class="label">BANK AI FIREWALL</p>
-          <h1>Phish or Legit?</h1>
+        <a class="brand" href="#" aria-label="Phish or Legit home">
+          <span class="brand-icon" aria-hidden="true">⌁</span>
+          <span><span class="brand-kicker">FIREWALL TRAINING</span><strong>Phish <em>or</em> Legit?</strong></span>
+        </a>
+        <div class="top-actions">
+          <div class="live-indicator"><span></span> SYSTEM READY</div>
+          <button id="sound-btn" class="icon-btn" type="button" aria-pressed="true" aria-label="Turn sound off" title="Toggle sound">♫ <span id="sound-label">Sound on</span></button>
         </div>
-        <button id="reset-btn" class="secondary-btn">New Shift</button>
       </header>
 
-      <section class="hud">
-        <div class="stat-box">
-          <span>Score</span>
-          <strong id="score">0</strong>
+      <section class="hud" aria-label="Game statistics">
+        <div class="stat-box"><span class="stat-label">Firewall score</span><strong id="score">0000</strong><span class="stat-detail">POINTS</span></div>
+        <div class="stat-box streak-stat"><span class="stat-label">Decision streak</span><strong id="streak">0<span class="streak-flame">×</span></strong><span class="stat-detail">BEST <b id="best-streak">0</b></span></div>
+        <div class="stat-box timer-stat"><span class="stat-label">Time remaining</span><strong id="timer">60.0<span>s</span></strong><span class="stat-detail">SHIFT COUNTDOWN</span></div>
+      </section>
+
+      <div class="time-track" aria-label="Time remaining"><div id="time-progress" class="time-progress"></div></div>
+
+      <section class="game-panel" aria-label="Security alert decision">
+        <div class="panel-topline"><span><i class="status-dot"></i> INCOMING ALERT</span><span id="case-count">CASE — / —</span></div>
+        <article id="card" class="decision-card" aria-live="polite" aria-atomic="true">
+          <div class="empty-state"><span class="radar" aria-hidden="true">◎</span><p>Your shift is about to begin.</p></div>
+        </article>
+        <div class="decision-row">
+          <button id="block-btn" class="decision-btn block-btn" type="button" disabled><span class="button-icon">×</span><span>BLOCK</span><kbd>←</kbd></button>
+          <p class="decision-hint">Trust your instincts. <span>One bad call can cost the bank.</span></p>
+          <button id="approve-btn" class="decision-btn approve-btn" type="button" disabled><span class="button-icon">✓</span><span>APPROVE</span><kbd>→</kbd></button>
         </div>
-        <div class="stat-box">
-          <span>Streak</span>
-          <strong id="streak">0</strong>
-        </div>
-        <div class="stat-box timer-box">
-          <span>Time</span>
-          <strong id="timer">60.0s</strong>
+        <div id="feedback" class="feedback" aria-live="polite">Review the details. Real banks never ask you to move money to a “safe” account.</div>
+      </section>
+
+      <footer class="footer"><span>TRAINING SIMULATION · NO REAL TRANSACTIONS</span><span>KEYBOARD: <kbd>←</kbd> BLOCK <span class="footer-separator">·</span> <kbd>→</kbd> APPROVE</span></footer>
+
+      <section id="start-overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="start-title">
+        <div class="overlay-card start-card">
+          <div class="hero-mark" aria-hidden="true"><span>⌁</span><i></i><i></i><i></i></div>
+          <p class="eyebrow"><span class="status-dot"></span> NEW SHIFT AVAILABLE</p>
+          <h1 id="start-title">Trust the signal.<br /><span>Catch the phish.</span></h1>
+          <p class="overlay-copy">You are the bank’s last line of defense. Review each alert and decide what gets through before the clock runs out.</p>
+          <div class="how-to-play"><div><span class="how-icon block-icon">×</span><p><b>BLOCK</b><small>Suspicious requests</small></p></div><div><span class="how-icon approve-icon">✓</span><p><b>APPROVE</b><small>Verified activity</small></p></div></div>
+          <div class="start-meta"><span>60 SECONDS</span><span>10+ CASES</span><span>NO PRESSURE 😉</span></div>
+          <button id="start-btn" class="primary-btn" type="button">START YOUR SHIFT <span>→</span></button>
+          <p class="keyboard-note">You can also use your <kbd>←</kbd> and <kbd>→</kbd> arrow keys.</p>
         </div>
       </section>
 
-      <main class="game-panel">
-        <div id="card" class="decision-card" aria-live="polite">
-          <div class="card-content placeholder-content">
-            <p class="label">Ready for the first alert</p>
-            <h2>Start your shift</h2>
-            <p>Approve real transfers. Block scams before the clock hits zero.</p>
-          </div>
+      <section id="gameover-overlay" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="gameover-title">
+        <div class="overlay-card result-card">
+          <div id="result-emblem" class="result-emblem" aria-hidden="true">✓</div>
+          <p id="result-kicker" class="eyebrow">SHIFT REPORT</p>
+          <h2 id="gameover-title">Firewall held.</h2>
+          <p id="result-copy" class="overlay-copy">Nice work protecting the bank.</p>
+          <div class="result-score"><span>FINAL SCORE</span><strong id="final-score">0000</strong><span id="new-record" class="record-badge hidden">✦ NEW PERSONAL BEST</span></div>
+          <div class="result-stats"><div><strong id="accuracy">0%</strong><span>ACCURACY</span></div><div><strong id="cases-reviewed">0</strong><span>CASES REVIEWED</span></div><div><strong id="best-run-streak">0</strong><span>BEST STREAK</span></div></div>
+          <button id="restart-btn" class="primary-btn" type="button">RUN IT BACK <span>↻</span></button>
+          <p class="keyboard-note">Remember: pause, verify through a trusted channel, then decide.</p>
         </div>
-
-        <div class="actions">
-          <button id="block-btn" class="action-btn block-btn">BLOCK</button>
-          <button id="approve-btn" class="action-btn approve-btn">APPROVE</button>
-        </div>
-
-        <div id="feedback" class="feedback" aria-live="polite">
-          Watch for urgency, spoofed identities, and suspicious links.
-        </div>
-      </main>
-    </div>
+      </section>
+    </main>
 
     <script src="script.js"></script>
   </body>

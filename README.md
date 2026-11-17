@@ -1,29 +1,27 @@
 # Phish or Legit?
 
-A fast-paced browser game where players act as a bank's AI firewall and decide whether a transfer or message is legitimate or a scam.
+A fast-paced browser game where you act as a bank’s AI firewall: review fictional transfers, messages, and voice-call transcripts, then block scams and approve legitimate activity before the 60-second shift ends.
 
-## How to run
+## Play locally
 
-Because this is a lightweight static web app, there are no install dependencies.
-
-1. Open the repo in your terminal.
-2. Start a simple local server:
+This is a dependency-free static web app. From the repository directory, run:
 
 ```bash
 python3 -m http.server 8000
 ```
 
-3. Visit `http://localhost:8000` in your browser.
+Then open [http://localhost:8000](http://localhost:8000).
 
-## Gameplay
+## Features
 
-- Every round presents a transfer, SMS alert, or voice-call scenario.
-- Players must choose either `APPROVE` or `BLOCK` before the timer reaches zero.
-- Legit transfers earn points; scam attempts cost points and break the streak.
-- Each decision is followed by a quick explanation so the player learns the signs of phishing and fraud.
+- Animated start screen and end-of-shift report overlay
+- 60-second rapid-fire round with shuffled, repeatable scenarios
+- Score, speed bonus, streak, accuracy, and personal best saved in your browser
+- Generated sound effects using the Web Audio API (toggle sound in the header)
+- Keyboard controls: **← Block**, **→ Approve**
+- Responsive layout and reduced-motion support
+- Fictional training scenarios only; no real transfers or generated deepfake audio
 
-## Controls
+## Safety note
 
-- `APPROVE` button: accept legitimate transfers or normal alerts.
-- `BLOCK` button: reject scam texts, deepfake voice requests, or suspicious actions.
-- `New Shift` button: restart the game with a new round order.
+This is a security-awareness training simulation, not financial advice. When in doubt, verify requests through a trusted, independently obtained contact channel. Never share passwords or one-time verification codes.
